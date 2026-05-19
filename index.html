@@ -1046,9 +1046,6 @@ async function run() {
     document.getElementById('results').innerHTML =
       results.map((r, i) => renderCard(r, i + 1)).join('');
 
-    // Auto-déploie le meilleur
-    document.getElementById(`card-${results[0]?.id}`)?.classList.add('open');
-
     const hasFb  = results.some(r => r.steps.some(s => s.fb));
     const ts     = new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
     setStatus(`Mis à jour ${ts}${hasFb ? ' · ⚠ IDs manquants — certains temps estimés' : ''}`);
