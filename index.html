@@ -629,13 +629,13 @@ allerwurtz: [
     id: 'W8', name: '[Ligne 6 / RER B / T10]',
     steps: [
       { type:'walk', label:'École → Glacière (L6)',       walkKey:'ecole_glaciere' },
-      { type:'wait', label:'Attente L6',                   stopRef:STOPS.L6_GLACIERE,        lineRef:LINES.L6,   direction:'Nation' },
+      { type:'wait', label:'Attente L6',                   stopRef:STOPS.L6_GLACIERE,        lineRef:LINES.L6,   direction:'' },
       { type:'ride', label:'L6 Glacière → Denfert',       travelKey:'L6_Glaciere_Denfert' },
       { type:'walk', label:'Denfert → quai RER B',        walkKey:'denfert_rerb' },
       { type:'wait', label:'Attente RER B',                stopRef:STOPS.RERB_CITE_UNIV_SUD,  lineRef:LINES.RERB, direction:'' },
       { type:'ride', label:'RER B → Croix de Berny',      travelKey:'RERB_CiteUniv_CroixBerny' },
       { type:'walk', label:'Croix de Berny → T10',        walkKey:'croix_berny_t10' },
-      { type:'wait', label:'Attente T10',                  stopRef:STOPS.T10_CROIX_BERNY_SUD, lineRef:LINES.T10,  direction:'Jardin Parisien' },
+      { type:'wait', label:'Attente T10',                  stopRef:STOPS.T10_CROIX_BERNY_SUD, lineRef:LINES.T10,  direction:'' },
       { type:'ride', label:'T10 → Noveos',                travelKey:'T10_CroixBerny_Noveos' },
       { type:'walk', label:'Noveos → Bureau',             walkKey:'noveos_bureau' },
     ]
