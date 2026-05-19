@@ -8,7 +8,20 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:        #07090f;
+  --bg:        #ffffff;
+  --s1:        #f4f6fa;
+  --s2:        #eaecf2;
+  --border:    #d0d8e8;
+  --amber:     #f59e0b;
+  --amber-dim: #fde9b2;
+  --green:     #16a34a;
+  --lime:      #65a30d;
+  --red:       #ef4444;
+  --text:      #1a2235;
+  --dim:       #6b7a99;
+  --mono:      'JetBrains Mono', monospace;
+  --sans:      'Outfit', sans-serif;
+ /* --bg:        #07090f;
   --s1:        #0f1523;
   --s2:        #141c2c;
   --border:    #1b2540;
@@ -20,7 +33,7 @@
   --text:      #e2eaf8;
   --dim:       #7a8da8;
   --mono:      'JetBrains Mono', monospace;
-  --sans:      'Outfit', sans-serif;
+  --sans:      'Outfit', sans-serif; */
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -526,7 +539,7 @@ aller102: [
       { type:'wait', label:'Attente RER B',                stopRef:STOPS.RERB_CITE_UNIV_SUD,  lineRef:LINES.RERB, direction:'' },
       { type:'ride', label:'RER B → Croix de Berny',      travelKey:'RERB_CiteUniv_CroixBerny' },
       { type:'walk', label:'Croix de Berny → T10',        walkKey:'croix_berny_t10' },
-      { type:'wait', label:'Attente T10',                  stopRef:STOPS.T10_CROIX_BERNY_SUD, lineRef:LINES.T10,  direction:'Jardin Parisien' },
+      { type:'wait', label:'Attente T10',                  stopRef:STOPS.T10_CROIX_BERNY_SUD, lineRef:LINES.T10,  direction:'' },
       { type:'ride', label:'T10 → Noveos',                travelKey:'T10_CroixBerny_Noveos' },
       { type:'walk', label:'Noveos → Bureau',             walkKey:'noveos_bureau' },
     ]
@@ -538,7 +551,7 @@ aller102: [
       { type:'wait', label:'Attente T3a',                  stopRef:STOPS.T3a_CHARLETY_OUEST, lineRef:LINES.T3a,  direction:'' },
       { type:'ride', label:'T3a → Porte de Vanves',       travelKey:'T3a_Charlety_PorteVanves' },
       { type:'walk', label:'Porte de Vanves → quai L13',  walkKey:'porte_vanves_l13' },
-      { type:'wait', label:'Attente L13',                  stopRef:STOPS.L13_PORTE_VANVES_SUD, lineRef:LINES.L13, direction:'Châtillon' },
+      { type:'wait', label:'Attente L13',                  stopRef:STOPS.L13_PORTE_VANVES_SUD, lineRef:LINES.L13, direction:'' },
       { type:'ride', label:'L13 → Châtillon-Montrouge',   travelKey:'L13_PorteVanves_Chatillon' },
       { type:'walk', label:'L13 → T6 Châtillon',          walkKey:'chatillon_l13_t6' },
       { type:'wait', label:'Attente T6',                   stopRef:STOPS.T6_CHATILLON_SUD,    lineRef:LINES.T6,   direction:'' },
@@ -553,7 +566,7 @@ aller102: [
       { type:'wait', label:'Attente T3a',                  stopRef:STOPS.T3a_CHARLETY_OUEST, lineRef:LINES.T3a,  direction:'' },
       { type:'ride', label:"T3a → Porte d'Orléans",       travelKey:'T3a_Charlety_PorteOrleans' },
       { type:'walk', label:"Porte d'Orléans → quai L4",   walkKey:'porte_orleans_l4' },
-      { type:'wait', label:'Attente L4',                   stopRef:STOPS.L4_PORTE_ORLEANS_SUD, lineRef:LINES.L4, direction:'Montrouge' },
+      { type:'wait', label:'Attente L4',                   stopRef:STOPS.L4_PORTE_ORLEANS_SUD, lineRef:LINES.L4, direction:'' },
       { type:'ride', label:'L4 → Barbara',                travelKey:'L4_PorteOrleans_Barbara' },
       { type:'walk', label:'Barbara → T6 Châtillon',      walkKey:'barbara_chatillon' },
       { type:'wait', label:'Attente T6',                   stopRef:STOPS.T6_CHATILLON_SUD,    lineRef:LINES.T6,   direction:'' },
@@ -571,7 +584,7 @@ aller102: [
       { type:'wait', label:'Attente RER B',                stopRef:STOPS.RERB_CITE_UNIV_SUD,  lineRef:LINES.RERB, direction:'' },
       { type:'ride', label:'RER B → Robinson',            travelKey:'RERB_CiteUniv_Robinson' },
       { type:'walk', label:'Robinson RER → Bus 395',      walkKey:'robinson_bus' },
-      { type:'wait', label:'Attente Bus 395',              stopRef:STOPS.BUS395_ROBINSON,    lineRef:LINES.B395, direction:'Galilée' },
+      { type:'wait', label:'Attente Bus 395',              stopRef:STOPS.BUS395_ROBINSON,    lineRef:LINES.B395, direction:'' },
       { type:'ride', label:'Bus 395 → Galilée',           travelKey:'B395_Robinson_Galilee' },
       { type:'walk', label:'Galilée → Bureau',            walkKey:'galilee_bureau' },
     ]
@@ -586,7 +599,7 @@ aller102: [
       { type:'wait', label:'Attente RER B',                stopRef:STOPS.RERB_CITE_UNIV_SUD,  lineRef:LINES.RERB, direction:'' },
       { type:'ride', label:'RER B → Robinson',            travelKey:'RERB_CiteUniv_Robinson' },
       { type:'walk', label:'Robinson RER → Bus 595',      walkKey:'robinson_bus' },
-      { type:'wait', label:'Attente Bus 595',              stopRef:STOPS.BUS595_ROBINSON,    lineRef:LINES.B595, direction:'Galilée' },
+      { type:'wait', label:'Attente Bus 595',              stopRef:STOPS.BUS595_ROBINSON,    lineRef:LINES.B595, direction:'' },
       { type:'ride', label:'Bus 595 → Galilée',           travelKey:'B595_Robinson_Galilee' },
       { type:'walk', label:'Galilée → Bureau',            walkKey:'galilee_bureau' },
     ]
@@ -605,7 +618,7 @@ allerwurtz: [
       { type:'wait', label:'Attente RER B',                stopRef:STOPS.RERB_DENFERT_SUD,   lineRef:LINES.RERB, direction:'' },
       { type:'ride', label:'RER B Denfert → Robinson',    travelKey:'RERB_Denfert_Robinson' },
       { type:'walk', label:'Robinson RER → Bus 595',      walkKey:'robinson_bus' },
-      { type:'wait', label:'Attente Bus 595',              stopRef:STOPS.BUS595_ROBINSON,    lineRef:LINES.B595, direction:'Galilée' },
+      { type:'wait', label:'Attente Bus 595',              stopRef:STOPS.BUS595_ROBINSON,    lineRef:LINES.B595, direction:'' },
       { type:'ride', label:'Bus 595 → Galilée',           travelKey:'B595_Robinson_Galilee' },
       { type:'walk', label:'Galilée → Bureau',            walkKey:'galilee_bureau' },
     ]
@@ -614,13 +627,13 @@ allerwurtz: [
     id: 'W7', name: '[Ligne 6 / RER B / Bus 395]',
     steps: [
       { type:'walk', label:'École → Glacière (L6)',       walkKey:'ecole_glaciere' },
-      { type:'wait', label:'Attente L6',                   stopRef:STOPS.L6_GLACIERE,        lineRef:LINES.L6,   direction:'Nation' },
+      { type:'wait', label:'Attente L6',                   stopRef:STOPS.L6_GLACIERE,        lineRef:LINES.L6,   direction:'' },
       { type:'ride', label:'L6 Glacière → Denfert',       travelKey:'L6_Glaciere_Denfert' },
       { type:'walk', label:'Denfert → quai RER B',        walkKey:'denfert_rerb' },
       { type:'wait', label:'Attente RER B',                stopRef:STOPS.RERB_DENFERT_SUD,   lineRef:LINES.RERB, direction:'' },
       { type:'ride', label:'RER B Denfert → Robinson',    travelKey:'RERB_Denfert_Robinson' },
       { type:'walk', label:'Robinson RER → Bus 395',      walkKey:'robinson_bus' },
-      { type:'wait', label:'Attente Bus 395',              stopRef:STOPS.BUS395_ROBINSON,    lineRef:LINES.B395, direction:'Galilée' },
+      { type:'wait', label:'Attente Bus 395',              stopRef:STOPS.BUS395_ROBINSON,    lineRef:LINES.B395, direction:'' },
       { type:'ride', label:'Bus 395 → Galilée',           travelKey:'B395_Robinson_Galilee' },
       { type:'walk', label:'Galilée → Bureau',            walkKey:'galilee_bureau' },
     ]
@@ -713,6 +726,36 @@ retour: [
       { type:'walk', label:"L4 Porte d'Orléans → T3a",    walkKey:'porte_orleans_l4' },
       { type:'wait', label:"Attente T3a Porte d'Orléans", stopRef:STOPS.T3a_PORTE_ORLEANS_EST, lineRef:LINES.T3a, direction:'Porte de Vincennes' },
       { type:'ride', label:'T3a → Stade Charléty',        travelKey:'T3a_PorteOrleans_Charlety' },
+      { type:'walk', label:'Charléty → Appart',           walkKey:'charlety_appart' },
+    ]
+  },
+    {
+    id: 'R5', name: '[T10 / RER B / T3a]',
+    steps: [
+      { type:'walk', label:'Bureau → T10 Noveos',          walkKey:'bureau_noveos' },
+      { type:'wait', label:'Attente T10',                   stopRef:STOPS.T10_NOVEOS_NORD,    lineRef:LINES.T10,  direction:'' },
+      { type:'ride', label:'T10 Noveos → Croix de Berny', travelKey:'T10_Noveos_CroixBerny' },
+      { type:'walk', label:'T10 → quai RER B',             walkKey:'t10_croixberny_rerb' },
+      { type:'wait', label:'Attente RER B',                 stopRef:STOPS.RERB_CROIX_BERNY_NORD, lineRef:LINES.RERB, direction:'' },
+      { type:'ride', label:'RER B → Cité Univ',           travelKey:'RERB_CroixBerny_CiteUniv' },
+      { type:'walk', label:'RER B Cité Univ → T3a',       walkKey:'rerb_citeuniv_t3a' },
+      { type:'wait', label:'Attente T3a Cité Univ',        stopRef:STOPS.T3a_CITE_UNIV_EST,  lineRef:LINES.T3a,  direction:'' },
+      { type:'ride', label:'T3a Cité Univ → Charléty',    travelKey:'T3a_CiteUniv_Charlety' },
+      { type:'walk', label:'Charléty → Appart',           walkKey:'charlety_appart' },
+    ]
+  },
+  {
+    id: 'R6', name: '[T6 / Ligne 13 / T3a]',
+    steps: [
+      { type:'walk', label:'Bureau → T6 Pavé Blanc',      walkKey:'bureau_pave_blanc' },
+      { type:'wait', label:'Attente T6',                   stopRef:STOPS.T6_PAVE_BLANC_NORD, lineRef:LINES.T6,   direction:'' },
+      { type:'ride', label:'T6 Pavé Blanc → Châtillon',   travelKey:'T6_PaveBlanc_Chatillon' },
+      { type:'walk', label:'T6 → L13 Châtillon',          walkKey:'chatillon_t6_l13' },
+      { type:'wait', label:'Attente L13',                  stopRef:STOPS.L13_CHATILLON_NORD, lineRef:LINES.L13,  direction:'' },
+      { type:'ride', label:'L13 → Porte de Vanves',       travelKey:'L13_Chatillon_PorteVanves' },
+      { type:'walk', label:'L13 Porte de Vanves → T3a',   walkKey:'porte_vanves_l13' },
+      { type:'wait', label:'Attente T3a Porte de Vanves', stopRef:STOPS.T3a_PORTE_VANVES_EST, lineRef:LINES.T3a, direction:'' },
+      { type:'ride', label:'T3a Porte de Vanves → Charléty', travelKey:'T3a_PorteVanves_Charlety' },
       { type:'walk', label:'Charléty → Appart',           walkKey:'charlety_appart' },
     ]
   },
