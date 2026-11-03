@@ -198,6 +198,13 @@ body {
 .step:last-child { border-bottom: none; }
 .step-ic { font-size: 14px; width: 18px; flex-shrink: 0; text-align: center; padding-top: 1px; }
 .step-lbl { flex: 1; font-size: 12px; color: var(--dim); line-height: 1.35; }
+.step-err {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--red);
+}  
 .step-dur {
   font-family: var(--mono);
   font-size: 13px;
@@ -813,21 +820,24 @@ async function getWaitMin(stopRef, lineRef, dirFilter, arrivalAtStopMs) {
 
     const visits = data?.Siri?.ServiceDelivery?.StopMonitoringDelivery?.[0]?.MonitoredStopVisit || [];
 
-    const candidates = visits.filter(v => {
-      const call  = v.MonitoredVehicleJourney?.MonitoredCall;
-      const dStr  = call?.ExpectedDepartureTime || call?.AimedDepartureTime;
-      if (!dStr) return false;
-      if (new Date(dStr).getTime() < arrivalAtStopMs) return false;
-      if (dirFilter) {
-        const dest = v.MonitoredVehicleJourney?.DestinationName?.[0]?.value || '';
-        if (!dest.toLowerCase().includes(dirFilter.toLowerCase())) return false;
-      }
-      return true;
-    });
-
-    if (!candidates.length) {
-      return { wait: Math.round(theoreticalFreq(lineRef) / 2), realtime: false, fallback: true, err: 'Aucun passage trouvé' };
-    }
+let tooEarly = 0, wrongDir = 0;
+const candidates = visits.filter(v => {
+  const call = v.MonitoredVehicleJourney?.MonitoredCall;
+  const dStr = call?.ExpectedDepartureTime || call?.AimedDepartureTime;
+  if (!dStr) return false;
+  if (new Date(dStr).getTime() < arrivalAtStopMs) { tooEarly++; return false; }
+  if (dirFilter) {
+    const dest = v.MonitoredVehicleJourney?.DestinationName?.[0]?.value || '';
+    if (!dest.toLowerCase().includes(dirFilter.toLowerCase())) { wrongDir++; return false; }
+  }
+  return true;
+});
+if (!candidates.length) {
+  const why = !visits.length
+    ? "l'API ne renvoie aucun passage pour cet arrêt"
+    : `${visits.length} passage(s) renvoyé(s) : ${tooEarly} avant mon arrivée, ${wrongDir} écarté(s) par le filtre direction « ${dirFilter} »`;
+  return { wait: Math.round(theoreticalFreq(lineRef) / 2), realtime: false, fallback: true, err: why };
+}
 
     const call   = candidates[0].MonitoredVehicleJourney?.MonitoredCall;
     const dStr   = call?.ExpectedDepartureTime || call?.AimedDepartureTime;
@@ -835,9 +845,14 @@ async function getWaitMin(stopRef, lineRef, dirFilter, arrivalAtStopMs) {
     const wait   = Math.max(0, Math.round((new Date(dStr).getTime() - arrivalAtStopMs) / 60000));
     return { wait, realtime: isRT, fallback: false };
 
-  } catch(e) {
-    return { wait: Math.round(theoreticalFreq(lineRef) / 2), realtime: false, fallback: true, err: e.message };
-  }
+ } catch(e) {
+  const m = String(e.message || e);
+  const why = m.includes('429') ? 'quota API dépassé (HTTP 429)'
+    : /40[13]/.test(m) ? `clé API refusée (${m})`
+    : m.includes('404') ? "ID d'arrêt introuvable (HTTP 404)"
+    : (e.name === 'TimeoutError' || e.name === 'AbortError') ? 'délai de 8 s dépassé'
+    : 'erreur réseau : ' + m;
+  return { wait: Math.round(theoreticalFreq(lineRef) / 2), realtime: false, fallback: true, err: why };
 }
 
 // ── Calcul d'un trajet complet ─────────────────────────────────────
@@ -928,7 +943,7 @@ function renderCard(res, rank) {
   const stepsHtml = res.steps.map(s => `
     <div class="step">
       <span class="step-ic">${stepIcon(s)}</span>
-      <span class="step-lbl">${s.label}</span>
+      <span class="step-lbl">${s.label}${s.fb && s.err ? `<span class="step-err">↳ ${s.err}</span>` : ''}</span>
       <span class="step-dur">${s.dur}<small>min</small>${stepBadge(s)}</span>
     </div>`).join('');
 
