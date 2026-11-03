@@ -854,6 +854,7 @@ if (!candidates.length) {
     : 'erreur réseau : ' + m;
   return { wait: Math.round(theoreticalFreq(lineRef) / 2), realtime: false, fallback: true, err: why };
 }
+}
 
 // ── Calcul d'un trajet complet ─────────────────────────────────────
 async function calcRoute(route) {
