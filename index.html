@@ -820,30 +820,55 @@ async function getWaitMin(stopRef, lineRef, dirFilter, arrivalAtStopMs) {
 
     const visits = data?.Siri?.ServiceDelivery?.StopMonitoringDelivery?.[0]?.MonitoredStopVisit || [];
 
-let tooEarly = 0, wrongDir = 0;
-const candidates = visits.filter(v => {
-  const call = v.MonitoredVehicleJourney?.MonitoredCall;
-  const dStr = call?.ExpectedDepartureTime || call?.AimedDepartureTime;
-  if (!dStr) return false;
-  if (new Date(dStr).getTime() < arrivalAtStopMs) { tooEarly++; return false; }
-  if (dirFilter) {
-    const dest = v.MonitoredVehicleJourney?.DestinationName?.[0]?.value || '';
-    if (!dest.toLowerCase().includes(dirFilter.toLowerCase())) { wrongDir++; return false; }
-  }
-  return true;
-});
-if (!candidates.length) {
-  const why = !visits.length
-    ? "l'API ne renvoie aucun passage pour cet arrêt"
-    : `${visits.length} passage(s) renvoyé(s) : ${tooEarly} avant mon arrivée, ${wrongDir} écarté(s) par le filtre direction « ${dirFilter} »`;
-  return { wait: Math.round(theoreticalFreq(lineRef) / 2), realtime: false, fallback: true, err: why };
-}
+    const norm = t => (t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[’‘]/g, "'").toLowerCase();
 
-    const call   = candidates[0].MonitoredVehicleJourney?.MonitoredCall;
-    const dStr   = call?.ExpectedDepartureTime || call?.AimedDepartureTime;
-    const isRT   = !!call?.ExpectedDepartureTime;
-    const wait   = Math.max(0, Math.round((new Date(dStr).getTime() - arrivalAtStopMs) / 60000));
-    return { wait, realtime: isRT, fallback: false };
+    // Départs dans le bon sens, triés par heure
+    const times = [];
+    for (const v of visits) {
+      const call = v.MonitoredVehicleJourney?.MonitoredCall;
+      const dStr = call?.ExpectedDepartureTime || call?.AimedDepartureTime;
+      if (!dStr) continue;
+      if (dirFilter) {
+        const dest = v.MonitoredVehicleJourney?.DestinationName?.[0]?.value || '';
+        if (!norm(dest).includes(norm(dirFilter))) continue;
+      }
+      times.push({ t: new Date(dStr).getTime(), rt: !!call?.ExpectedDepartureTime });
+    }
+    times.sort((a, b) => a.t - b.t);
+
+    // 1) Cas normal : un passage après mon arrivée
+    const next = times.find(x => x.t >= arrivalAtStopMs);
+    if (next) {
+      return {
+        wait: Math.max(0, Math.round((next.t - arrivalAtStopMs) / 60000)),
+        realtime: next.rt, fallback: false
+      };
+    }
+
+    // 2) Tous les passages sont avant mon arrivée : projection sur l'intervalle observé
+    if (times.length >= 2) {
+      const last = times.slice(-4);
+      const headway = (last[last.length - 1].t - last[0].t) / (last.length - 1);
+      if (headway >= 60000 && headway <= 30 * 60000) {
+        const lastT = times[times.length - 1].t;
+        const k = Math.ceil((arrivalAtStopMs - lastT) / headway);
+        const wait = Math.max(0, Math.round((lastT + k * headway - arrivalAtStopMs) / 60000));
+        return {
+          wait, realtime: false, fallback: true,
+          err: `projeté : ${times.length} passage(s) tous avant mon arrivée, un train toutes les ${Math.round(headway / 60000)} min`
+        };
+      }
+    }
+
+    // 3) Repli théorique
+    const why = !visits.length
+      ? "l'API ne renvoie aucun passage pour cet arrêt"
+      : !times.length
+        ? (dirFilter
+            ? `${visits.length} passage(s) renvoyé(s), tous écartés par le filtre direction « ${dirFilter} »`
+            : 'passages renvoyés sans horaire exploitable')
+        : 'un seul passage connu, projection impossible';
+    return { wait: Math.round(theoreticalFreq(lineRef) / 2), realtime: false, fallback: true, err: why };
 
  } catch(e) {
   const m = String(e.message || e);
